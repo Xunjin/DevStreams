@@ -1,8 +1,8 @@
-﻿using DevChatter.DevStreams.Core.Model;
-using DevChatter.DevStreams.Web.Data;
+﻿using DevChatter.DevStreams.Core.Data;
+using DevChatter.DevStreams.Core.Model;
 using DevChatter.DevStreams.Web.Data.ViewModel.Channels;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,21 +11,21 @@ namespace DevChatter.DevStreams.Web.Pages.My.Channels
 {
     public class IndexModel : PageModel
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IChannelAggregateService _channelAggregateService;
 
-        public IndexModel(ApplicationDbContext context)
+        public IndexModel(IChannelAggregateService channelAggregateService)
         {
-            _context = context;
+            _channelAggregateService = channelAggregateService;
         }
 
         public IList<ChannelIndexModel> Channels { get;set; }
 
-        public async Task OnGetAsync()
+        public IActionResult OnGetAsync()
         {
-            List<Channel> models = await _context.Channels
-                .Include(x => x.ScheduledStreams)
-                .ToListAsync();
+            List<Channel> models = _channelAggregateService.GetAll();
             Channels = models.Select(model => model.ToChannelIndexModel()).ToList();
+
+            return Page();
         }
     }
 }

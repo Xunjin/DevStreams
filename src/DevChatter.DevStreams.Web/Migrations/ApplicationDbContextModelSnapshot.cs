@@ -15,108 +15,9 @@ namespace DevChatter.DevStreams.Web.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("DevChatter.DevStreams.Core.Model.Channel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CountryCode")
-                        .IsRequired();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.Property<string>("TimeZoneId")
-                        .IsRequired();
-
-                    b.Property<string>("Uri")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Channels");
-                });
-
-            modelBuilder.Entity("DevChatter.DevStreams.Core.Model.ChannelTag", b =>
-                {
-                    b.Property<int>("ChannelId");
-
-                    b.Property<int>("TagId");
-
-                    b.HasKey("ChannelId", "TagId");
-
-                    b.HasIndex("TagId");
-
-                    b.ToTable("ChannelTag");
-                });
-
-            modelBuilder.Entity("DevChatter.DevStreams.Core.Model.ScheduledStream", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ChannelId")
-                        .IsRequired();
-
-                    b.Property<string>("DayOfWeek")
-                        .IsRequired();
-
-                    b.Property<long>("LocalEndTime");
-
-                    b.Property<long>("LocalStartTime");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ChannelId");
-
-                    b.ToTable("ScheduledStream");
-                });
-
-            modelBuilder.Entity("DevChatter.DevStreams.Core.Model.StreamSession", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("ScheduledStreamId")
-                        .IsRequired();
-
-                    b.Property<string>("TzdbVersionId")
-                        .IsRequired();
-
-                    b.Property<long>("UtcEndTime");
-
-                    b.Property<long>("UtcStartTime");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ScheduledStreamId");
-
-                    b.ToTable("StreamSessions");
-                });
-
-            modelBuilder.Entity("DevChatter.DevStreams.Core.Model.Tag", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Description")
-                        .IsRequired();
-
-                    b.Property<string>("Name")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tags");
-                });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
@@ -281,35 +182,6 @@ namespace DevChatter.DevStreams.Web.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
-                });
-
-            modelBuilder.Entity("DevChatter.DevStreams.Core.Model.ChannelTag", b =>
-                {
-                    b.HasOne("DevChatter.DevStreams.Core.Model.Channel", "Channel")
-                        .WithMany("Tags")
-                        .HasForeignKey("ChannelId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("DevChatter.DevStreams.Core.Model.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("DevChatter.DevStreams.Core.Model.ScheduledStream", b =>
-                {
-                    b.HasOne("DevChatter.DevStreams.Core.Model.Channel", "Channel")
-                        .WithMany("ScheduledStreams")
-                        .HasForeignKey("ChannelId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("DevChatter.DevStreams.Core.Model.StreamSession", b =>
-                {
-                    b.HasOne("DevChatter.DevStreams.Core.Model.ScheduledStream", "ScheduledStream")
-                        .WithMany("Sessions")
-                        .HasForeignKey("ScheduledStreamId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
